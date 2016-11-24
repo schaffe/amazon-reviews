@@ -18,7 +18,7 @@ public class Invoker {
     public static final int DEFAULT_ITEMS = 500_000;
 
     public static void main(String[] args) throws IOException {
-        System.in.read();
+//        System.in.read();
         Tuple3<String, Integer, Boolean> argumets = parseArgs(args);
 
         ActorSystem system = ActorSystem.create("amazon-reviews");
