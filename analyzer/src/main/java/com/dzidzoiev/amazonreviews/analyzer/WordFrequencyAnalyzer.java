@@ -7,7 +7,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 class WordFrequencyAnalyzer {
-    private static final Pattern wordsSplitPattern = Pattern.compile("[[ ]*|[,]*|[\\.]*|[:]*|[/]*|[!]*|[?]*|[+]*|[\"]*|[(]*|[)]*]+|(</?br>)+");
+    private static final Pattern wordsSplitPattern = Pattern.compile("[^a-zA-Z']");
 
     static Map<String, Integer> analyzeWordFrequency(CharSequence text) {
         String[] words = splitWords(text);

@@ -14,19 +14,19 @@ import java.io.IOException;
  */
 public class Invoker {
 
-    public static final String DEFAULT_FILE = "analyzer/src/main/resources/Reviews.csv";
-    public static final int DEFAULT_ITEMS = 500_000;
+    private static final String DEFAULT_FILE = "analyzer/src/main/resources/Reviews.csv";
+    private static final int DEFAULT_ITEMS = 500;
 
     public static void main(String[] args) throws IOException {
-//        System.in.read();
-        Tuple3<String, Integer, Boolean> argumets = parseArgs(args);
+        Tuple3<String, Integer, Boolean> arguments = parseArgs(args);
 
         ActorSystem system = ActorSystem.create("amazon-reviews");
 
         int cores = Runtime.getRuntime().availableProcessors();
-        Kernel.StartProcessingMessage start = new Kernel.StartProcessingMessage(argumets, cores);
-        final ActorRef kernel = system.actorOf(Props.create(Kernel.class, start), "kernel");
-        kernel.tell(start, ActorRef.noSender());
+        Kernel.StartProcessingMessage startMessage = new Kernel.StartProcessingMessage(arguments, cores);
+
+        final ActorRef kernel = system.actorOf(Props.create(Kernel.class, startMessage), "kernel");
+        kernel.tell(startMessage, ActorRef.noSender());
     }
 
     private static Tuple3<String, Integer, Boolean> parseArgs(String[] args) {
@@ -34,11 +34,19 @@ public class Invoker {
             return new Tuple3<>(args[0], DEFAULT_ITEMS, false);
         else if (args.length == 2)
             return new Tuple3<>(args[0], Integer.valueOf(args[1]), false);
-        else if (args.length == 3) {
-            Boolean translate = Boolean.valueOf(args[2].replaceAll("`", "").split("=")[1]);
-            return new Tuple3<>(args[0], Integer.valueOf(args[1]), translate);
-        } else
+        else if (args.length == 3)
+            return new Tuple3<>(args[0], Integer.valueOf(args[1]), extractTranslateArgument(args[2]));
+        else
             return new Tuple3<>(DEFAULT_FILE, DEFAULT_ITEMS, false);
 
+    }
+
+    private static boolean extractTranslateArgument(String arg) {
+        String unquote = arg.replaceAll("\'|`|\"", "");
+        String[] parts = unquote.split("=");
+        if (parts.length < 2)
+            throw new IllegalArgumentException("You shuould pass `translate=true` argument to turn on translation.");
+        String boolString = parts[1];
+        return Boolean.valueOf(boolString);
     }
 }

@@ -1,4 +1,4 @@
-package com.dzidzoiev.amazonreviews.translator;
+package com.dzidzoiev.amazonreviews;
 
 import akka.actor.ActorRef;
 import akka.actor.Props;
@@ -28,7 +28,8 @@ public class TranslatorEngine extends UntypedActor {
         }
         if (message instanceof PartialJob) {
             acceptPartialResult((PartialJob) message)
-                    //tell result to consumer
+                    //STUB!
+                    //tell result to result handler
                     .ifPresent(System.out::println);
 
         }
@@ -107,6 +108,30 @@ public class TranslatorEngine extends UntypedActor {
         @Override
         public int hashCode() {
             return Objects.hash(order, text);
+        }
+    }
+
+    static class TranslateMessage {
+        private final String input_lang;
+        private final String output_lang;
+        private final String text;
+
+        public TranslateMessage(String input_lang, String output_lang, String text) {
+            this.input_lang = input_lang;
+            this.output_lang = output_lang;
+            this.text = text;
+        }
+
+        public String getInput_lang() {
+            return input_lang;
+        }
+
+        public String getOutput_lang() {
+            return output_lang;
+        }
+
+        public String getText() {
+            return text;
         }
     }
 }

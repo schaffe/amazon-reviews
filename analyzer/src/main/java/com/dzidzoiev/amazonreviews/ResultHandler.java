@@ -16,7 +16,7 @@ public class ResultHandler extends UntypedActor {
             System.out.println(new TreeSet<>(jobResult.itemCommentsMap.keySet()));
             System.out.println(new TreeSet<>(jobResult.wordFrequency.keySet()));
 
-            context().actorSelection(Kernel.getRegistry().kernel).tell(Kernel.EVENT.FINISH, getSelf());
+            context().actorSelection(Kernel.getRegistry().kernel).tell(Kernel.EVENTS.FINISH, getSelf());
             return;
         }
         unhandled(message);
