@@ -25,9 +25,10 @@ endpoint (when launched with the argument ‘translate=true’)
 * Run application jar with main class `com.dzidzoiev.amazonreviews.Invoker`.
 
 Program arguments
-1. String - Path to file
-1. Integer - Number of items to process
-1. Value ‘translate=true’ - Translate reviews (mocked)
+
+1. Path to file
+1. Number of items to process
+1. Parameter ‘translate=true’ - translate reviews (mocked)
     
 ## Memory consumption
 Analyzed with jconsole
